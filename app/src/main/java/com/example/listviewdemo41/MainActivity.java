@@ -1,5 +1,6 @@
 package com.example.listviewdemo41;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     Contact contact, contact1, contact2, contact3, contact4;
     List<Contact> contactList;
     RelativeLayout btnAdd;
+    AdapterContact adapterContact;
+    int posotion = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +45,55 @@ public class MainActivity extends AppCompatActivity {
         contactList.add(contact3);
         contactList.add(contact4);
 
-        AdapterContact adapterContact = new AdapterContact(contactList);
+        adapterContact = new AdapterContact(contactList);
         lvDemo.setAdapter(adapterContact);
 
         lvDemo.setOnItemClickListener((parent, view, position, id) -> {
 
+            this.posotion = position;
             Contact contact = contactList.get(position);
             String name = contact.getName();
             Toast.makeText(getBaseContext(), name, Toast.LENGTH_LONG).show();
 
             Intent intent = new Intent(getBaseContext(), AddContactActivity.class);
             intent.putExtra("_name", name);
-            intent.putExtra("KeyAdd",true );
-            startActivity(intent);
+            intent.putExtra("KeyAdd", true);
+//            startActivity(intent);
+            startActivityForResult(intent, 115);
         });
 
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getBaseContext(), AddContactActivity.class);
 
             intent.putExtra("_name", "Android 40");
-            intent.putExtra("KeyAdd",false );
+            intent.putExtra("KeyAdd", false);
 
-            startActivity(intent);
+            startActivityForResult(intent, 113);
+//            startActivity(intent);
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode) {
+            case RESULT_OK:
+                String newName = data.getStringExtra("newName");
+
+                if (requestCode == 113) {
+
+                    contactList.add(new Contact(888, newName, "hà nội", false));
+                    adapterContact.notifyDataSetChanged();
+
+                } else if (requestCode == 115) {
+                    contactList.set(posotion, new Contact(0000, newName, "Dịch Vọng", false));
+                    adapterContact.notifyDataSetChanged();
+                }
+
+
+                break;
+            case RESULT_CANCELED:
+        }
     }
 }
