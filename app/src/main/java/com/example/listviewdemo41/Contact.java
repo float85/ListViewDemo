@@ -1,6 +1,8 @@
 package com.example.listviewdemo41;
 
-public class Contact {
+import java.io.Serializable;
+
+public class Contact implements Serializable {
     private float phoneNumber;
     private String name;
     private String address;

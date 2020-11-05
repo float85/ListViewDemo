@@ -2,9 +2,12 @@ package com.example.listviewdemo41;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +42,30 @@ public class RecyclerViewDemo extends AppCompatActivity {
 
         adapterDemo = new RecyclerVIewAdapterDemo(contactList);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
-                getBaseContext(), 2, RecyclerView.VERTICAL, false);
+//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(
+//                getBaseContext(), 2, RecyclerView.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager =
+                new LinearLayoutManager(getBaseContext(), RecyclerView.HORIZONTAL, false);
 
         rvList.setLayoutManager(layoutManager);
         rvList.setAdapter(adapterDemo);
+
+        adapterDemo.setOnItemClickContact(new onItemClickContact() {
+            @Override
+            public void onNumberClick(float phoneNumber) {
+                Toast.makeText(getBaseContext(), phoneNumber + "", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNameClick(Contact contact) {
+                Toast.makeText(getBaseContext(), contact.getName(), Toast.LENGTH_LONG).show();
+
+                Intent intent =new Intent(getBaseContext(),AddContactActivity.class);
+                intent.putExtra("ContactPush",contact);
+                startActivity(intent);
+
+            }
+        });
 
     }
 }

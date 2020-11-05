@@ -13,6 +13,11 @@ import java.util.List;
 public class RecyclerVIewAdapterDemo extends RecyclerView.Adapter<RecyclerVIewAdapterDemo.Viewhoder> {
 
     List<Contact> contactList;
+    onItemClickContact onItemClickContact;
+
+    public void setOnItemClickContact(onItemClickContact _onItemClickContact) {
+        this.onItemClickContact = _onItemClickContact;
+    }
 
     public RecyclerVIewAdapterDemo(List<Contact> contactList) {
         this.contactList = contactList;
@@ -34,6 +39,20 @@ public class RecyclerVIewAdapterDemo extends RecyclerView.Adapter<RecyclerVIewAd
 
         holder.tvName.setText(contact.getName());
         holder.tvPhone.setText(contact.getPhoneNumber() + "");
+
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickContact.onNameClick(contact);
+            }
+        });
+
+        holder.tvPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickContact.onNumberClick(contact.getPhoneNumber());
+            }
+        });
 
 
     }
